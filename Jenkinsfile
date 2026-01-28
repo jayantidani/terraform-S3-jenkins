@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent {label 'local'}
      
      environment {
         AWS_DEFAULT_REGION = "ap-south-1"
@@ -7,22 +7,22 @@ pipeline {
      }
      stages {
         stage('Clone repo') {
-            steps {
+          steps {
         git url: 'https://github.com/jayantidani/terraform-S3-jenkins.git', branch: 'main'
         }
     } 
         stage('Terraform init') {
-            steps {
+          steps {
                 sh 'terraform init'
         }
     }    
         stage('Terraform plan'){
-            steps {
+          steps {
                 sh 'terraform plan -var="bucket_name=$BUCKET_NAME"'
         }
     }    
         stage('Terraform apply'){
-            steps {
+          steps {
                 sh 'terraform apply -auto-approve -var="bucket_name=$BUCKET_NAME"'
         } 
     }           
